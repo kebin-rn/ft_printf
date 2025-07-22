@@ -27,32 +27,59 @@ static int	ft_hex_len(unsigned int num)
 	return (len);
 }
 
-static void	ft_put_hex(unsigned int num, const char format)
+static int	ft_print_hex_digit(unsigned int num, const char format)
 {
-	if (num >= 16)
+	if (num <= 9)
 	{
-		ft_put_hex(num / 16, format);
-		ft_put_hex(num % 16, format);
+		if (ft_print_char(num + '0') == -1)
+			return (-1);
 	}
 	else
 	{
-		if (num <= 9)
-			ft_print_char(num + '0');
-		else
+		if (format == 'x')
 		{
-			if (format == 'x')
-				ft_print_char(num - 10 + 'a');
-			if (format == 'X')
-				ft_print_char(num - 10 + 'A');
+			if (ft_print_char(num - 10 + 'a') == -1)
+				return (-1);
+		}
+		if (format == 'X')
+		{
+			if (ft_print_char(num - 10 + 'A') == -1)
+				return (-1);
 		}
 	}
+	return (0);
+}
+
+static int	ft_put_hex(unsigned int num, const char format)
+{
+	int	ret;
+
+	if (num >= 16)
+	{
+		ret = ft_put_hex(num / 16, format);
+		if (ret == -1)
+			return (-1);
+		ret = ft_put_hex(num % 16, format);
+		if (ret == -1)
+			return (-1);
+	}
+	else
+		return (ft_print_hex_digit(num, format));
+	return (0);
 }
 
 int	ft_print_hex(unsigned int num, const char format)
 {
 	if (num == 0)
-		return (write(1, "0", 1));
+	{
+		if (write(1, "0", 1) == -1)
+			return (-1);
+		return (1);
+	}
 	else
-		ft_put_hex(num, format);
+	{
+		if (ft_put_hex(num, format) == -1)
+			return (-1);
+	}
 	return (ft_hex_len(num));
 }

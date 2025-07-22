@@ -14,7 +14,8 @@
 
 int	ft_print_char(int c)
 {
-	write(1, &c, 1);
+	if (write(1, &c, 1) == -1)
+		return (-1);
 	return (1);
 }
 
@@ -25,12 +26,14 @@ int	ft_print_str(char *str)
 	i = 0;
 	if (!str)
 	{
-		write(1, "(null)", 6);
+		if (write(1, "(null)", 6) == -1)
+			return (-1);
 		return (6);
 	}
 	while (str[i])
 	{
-		write(1, &str[i], 1);
+		if (write(1, &str[i], 1) == -1)
+			return (-1);
 		i++;
 	}
 	return (i);
@@ -38,6 +41,7 @@ int	ft_print_str(char *str)
 
 int	ft_print_percent(void)
 {
-	write(1, "%", 1);
+	if (write(1, "%", 1) == -1)
+		return (-1);
 	return (1);
 }

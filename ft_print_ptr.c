@@ -25,33 +25,56 @@ static int	ft_ptr_len(unsigned long long num)
 	return (len);
 }
 
-static void	ft_put_ptr(unsigned long long num)
+static int	ft_put_ptr(unsigned long long num)
 {
+	int	ret;
+
 	if (num >= 16)
 	{
-		ft_put_ptr(num / 16);
-		ft_put_ptr(num % 16);
+		ret = ft_put_ptr(num / 16);
+		if (ret == -1)
+			return (-1);
+		ret = ft_put_ptr(num % 16);
+		if (ret == -1)
+			return (-1);
 	}
 	else
 	{
 		if (num <= 9)
-			ft_print_char(num + '0');
+		{
+			if (ft_print_char(num + '0') == -1)
+				return (-1);
+		}
 		else
-			ft_print_char(num - 10 + 'a');
+		{
+			if (ft_print_char(num - 10 + 'a') == -1)
+				return (-1);
+		}
 	}
+	return (0);
 }
 
 int	ft_print_ptr(unsigned long long ptr)
 {
 	int	print_length;
+	int	ret;
 
 	print_length = 0;
 	if (ptr == 0)
-		print_length += write(1, "(nil)", 5);
+	{
+		ret = write(1, "(nil)", 5);
+		if (ret == -1)
+			return (-1);
+		print_length += ret;
+	}
 	else
 	{
-		print_length += write(1, "0x", 2);
-		ft_put_ptr(ptr);
+		ret = write(1, "0x", 2);
+		if (ret == -1)
+			return (-1);
+		print_length += ret;
+		if (ft_put_ptr(ptr) == -1)
+			return (-1);
 		print_length += ft_ptr_len(ptr);
 	}
 	return (print_length);

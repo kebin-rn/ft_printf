@@ -62,7 +62,7 @@ int	ft_print_nbr(int n)
 	len = 0;
 	num = ft_itoa(n);
 	if (!num)
-		return (0);
+		return (-1);
 	len = ft_print_str(num);
 	free(num);
 	return (len);
@@ -92,7 +92,7 @@ int	ft_print_unsigned(unsigned int n)
 	len = ft_num_len_unsigned(n);
 	num = (char *)malloc(sizeof(char) * (len + 1));
 	if (!num)
-		return (0);
+		return (-1);
 	num[len] = '\0';
 	if (n == 0)
 		num[0] = '0';
